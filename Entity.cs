@@ -1,66 +1,129 @@
 using System;
-namespace projectP1{
-  class Entity
-  {
-    public int posX;
-    public int posY;
-
-
-    public int PosX
+namespace projectP1
+{
+    //Abstract class, as it will never be instantiated as an Entity, only as a Player or enemy
+    abstract class Entity
     {
-        get
+        //Attributes
+        protected char identifier;    //The Console identifier for the entity
+        protected int currentHealth;  //The current health of the entity (never more than maxHealth)
+        protected int maxHealth;      //Max health of the entity (can be increased through powerups
+        protected int armorClass;            //Percentage chance to be hit by an attack
+        protected int attackDamage;         //Damage they deal when they hit with an attack
+        public int posX;              //Current position in the grid on the X Axis
+        public int posY;              //Current position in the Grid on the Y Axis
+
+        //Properties
+        //Marks the player's current health
+        public int CurrentHealth
         {
-            return posX;
+            get
+            {
+                return currentHealth;
+            }
+            set
+            {
+                currentHealth = value;
+                //Makes sure that an object's current health doesn't surpass its max health limit
+                if (currentHealth > maxHealth)
+                {
+                    currentHealth = maxHealth;
+                }
+                //If the pentity's health reaches 0, they die
+                else if (currentHealth <= 0)
+                {
+                    Die();
+                }
+            }
         }
 
-        set
+        //Abstract method, so that each of the inheriting classes may define its behavior inside their own class
+        public abstract int MaxHealth
         {
-            posX = value;
+            get;
+            set;
         }
+
+        //defines the chance to be hit
+        public int ArmorClass
+        {
+            get
+            {
+                return armorClass;
+            }
+
+            set
+            {
+                //should always be able to be hit, characters may not be invincible, even after collecting powerups that make them nimbler
+                armorClass = value;
+                if (armorClass < 90)
+                {
+                    armorClass = 90;
+                }
+            }
+        }
+
+        //Is the damage an entity does to another when attacking them
+        public int AttackDamage
+        {
+            get
+            {
+                return attackDamage;
+            }
+            set
+            {
+                attackDamage = value;
+            }
+        }
+
+        //The X position of the entity in the matrix
+        public int PosX
+        {
+            get
+            {
+                return posX;
+            }
+            set
+            {
+                posX = value;
+            }
+        }
+
+        //The Y position of the entity in the matrix
+        public int PosY
+        {
+            get
+            {
+                return posY;
+            }
+            set
+            {
+                posY = value;
+            }
+        }
+        
+
+        //Happens whenever an entity collides with another, and happens the same way for both types of entities
+        protected virtual void Attack(Entity receiving)
+        {
+            Random randomNumber = new Random();
+            int hitRoll = randomNumber.Next(1, 100);
+            
+            //Whenever the character hits, it deals iits attackDamage as damage to the other's health.
+            if (hitRoll >= receiving.armorClass)
+            {
+                receiving.TakeDamage(AttackDamage);
+            }
+
+        }
+
+        //Both types of entities take damage in the same way
+        protected virtual void TakeDamage( int damageDealt)
+        {
+            CurrentHealth -= damageDealt;
+        }
+
+        //Both types of entities cause diferent things as they die, meaning each would need to define what happens
+        protected abstract void Die();
     }
-
-    public int PosY
-    {
-        get
-        {
-            return posY;
-        }
-
-        set
-        {
-            posY = value;
-        }
-    }
-    // char identifier; //What is printed in the console
-    // int currentHealth;
-    // int maxHealth;
-    // int hit;      //Percentage chance to be hit
-    // int attack;   //Damage they deal when they hit
-
-    // enum EntityStates //The States an Entity can exist in
-    // {
-    //   ALIVE = 1,
-    //   DEAD
-
-    // };
-
-    // protected virtual void Attack(Entity receiving)
-    // {
-    //   int hitRoll = Random.Next(1,100);
-    //   if (hitRoll < receiving.hit){
-
-    //   }
-
-    // }
-
-    // protected virtual void TakeDamage()
-    // {
-      
-    // }    
-
-    // protected virtual void Die()
-    // {
-
-    // }
-  }
 }

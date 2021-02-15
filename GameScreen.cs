@@ -45,10 +45,10 @@ namespace projectP1
             int count = 0;
             while (sr.Peek() >= 0) //There's more content in the file
             {
-                char[] s = sr.ReadLine().ToCharArray();
+                char[] s = sr.ReadLine().ToCharArray(); // readline
                 for (int i = 0; i < s.Length; i++)
                 {
-                    map[count, i] = s[i];
+                    map[count, i] = s[i]; // update map
                 }
                 count++;
             }
@@ -128,7 +128,7 @@ namespace projectP1
                 }                
             }
 
-            // view update
+            // view update 
             for (int i = 0; i < HEIGHT; i++)
             {
                 for (int j = 0; j < WIDTH; j++)
@@ -140,24 +140,28 @@ namespace projectP1
             
         }
 
-        //
+        
         public bool CheckPlayer(int vert, int hor)
         {
+            // Enemy checks the existance of player using 4 directions Radar
             if (map[vert - 1, hor] == '$' || map[vert, hor - 1] == '$' || map[vert + 1, hor] == '$' || map[vert, hor + 1] == '$')
                 return true;
             return false;
         }
-        //movememt of the enemy
+
+        
         public void SwapPosition(int curVert, int curHor, int nextVert, int nextHor)
         {
+            //movememt of the player and the enemy
             char tmp = map[curVert, curHor];
             map[curVert, curHor] = map[nextVert, nextHor];
             map[nextVert, nextHor] = tmp;
         }
-        //Reads input from keyboard
+        
 
         public bool MovePlayer()
         {
+          //Reads input from keyboard
             ConsoleKeyInfo _Key = Console.ReadKey();
             switch (_Key.Key)
             {
@@ -188,9 +192,10 @@ namespace projectP1
           }
           PrintPlayerStatus();
           // level up conditions
+          // if player meet 'E','N','D', it  returns false (go to next level or finish this game) 
           if(map[myPlayer.PosVert, myPlayer.PosHor + 1] == 'E' 
-          && map[myPlayer.PosVert, myPlayer.PosHor + 2] == 'N' 
-          && map[myPlayer.PosVert, myPlayer.PosHor + 3] == 'D')
+            && map[myPlayer.PosVert, myPlayer.PosHor + 2] == 'N' 
+            && map[myPlayer.PosVert, myPlayer.PosHor + 3] == 'D')
           {
             return false;
           } else
@@ -201,8 +206,10 @@ namespace projectP1
 
 
         public bool NextFlag(int curVert, int curHor)
-        {
-            if (map[curVert, curHor] == '*' || map[curVert, curHor] == '+')
+        {   
+            // player can move only '+' and '*' cpmditions
+            // it look like collision detection
+            if (map[curVert, curHor] == '*' || map[curVert, curHor] == '+') 
                 return true;
             return false;
         }

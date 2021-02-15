@@ -23,7 +23,8 @@ namespace projectP1{
 
             }
         }
-
+        //Sets the name of the player to the received value
+        //Returns the player's name
         public string PlayerName
         {
           get
@@ -35,7 +36,8 @@ namespace projectP1{
             playerName = value;
           }
         }
-
+        //Sets the class of the player to the received value
+        //Returns the player's class
         public string PlayerClass
         { 
           get
@@ -48,6 +50,8 @@ namespace projectP1{
           }
         }
 
+        //Sets the player's score to the received value
+        //Returns the player's score
         public int Score
         { 
           get
@@ -92,13 +96,10 @@ namespace projectP1{
                     break;
             }
         }
-
+        //Player died
         protected override void Die()
         {
             
         }
-
-
-
     }
 }

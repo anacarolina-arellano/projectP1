@@ -4,6 +4,7 @@ namespace projectP1
     //Abstract class, as it will never be instantiated as an Entity, only as a Player or enemy
     abstract class Entity
     {
+        //possible status of player and enemies
         protected enum EntityStatus{
           ALIVE = 1,
           DEAD

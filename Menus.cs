@@ -34,7 +34,8 @@ namespace projectP1{
       Console.WriteLine("2. Thief");
       Console.WriteLine("3. Wizard");
     }
-
+    
+    //Shows that the game has started
     public void startOfGame(){
       Console.WriteLine("╔═══╗───────╔╗");
       Console.WriteLine("║╔═╗║───────║║");
@@ -59,5 +60,17 @@ namespace projectP1{
       Console.WriteLine("║╚╩═║╚╝╠╗");
       Console.WriteLine("╚═══╩══╩╝");
     }
+    //If the player wins
+    public void congratulations(){
+      Console.WriteLine("╔═══╗─────────────╔╗───╔╗───╔╗──────────╔╗");
+      Console.WriteLine("║╔═╗║────────────╔╝╚╗──║║──╔╝╚╗─────────║║");
+      Console.WriteLine("║║─╚╬══╦═╗╔══╦═╦═╩╗╔╬╗╔╣║╔═╩╗╔╬╦══╦═╗╔══╣║");
+      Console.WriteLine("║║─╔╣╔╗║╔╗╣╔╗║╔╣╔╗║║║║║║║║╔╗║║╠╣╔╗║╔╗╣══╬╝");
+      Console.WriteLine("║╚═╝║╚╝║║║║╚╝║║║╔╗║╚╣╚╝║╚╣╔╗║╚╣║╚╝║║║╠══╠╗");
+      Console.WriteLine("╚═══╩══╩╝╚╩═╗╠╝╚╝╚╩═╩══╩═╩╝╚╩═╩╩══╩╝╚╩══╩╝");
+      Console.WriteLine("──────────╔═╝║");
+      Console.WriteLine("──────────╚══╝");
+    }
+
   }
 }

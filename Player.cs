@@ -3,6 +3,7 @@ using System;
 namespace projectP1{
   class Player: Entity
   {
+        string playerName;
         string playerClass; //The player can be a Fighter, a Wizard or a Thief
         int score;  //Gold is used to calculate the score at the end
 
@@ -21,6 +22,18 @@ namespace projectP1{
                 CurrentHealth = maxHealth;
 
             }
+        }
+
+        public string PlayerName
+        {
+          get
+          {
+            return playerName;
+          }
+          set
+          {
+            playerName = value;
+          }
         }
 
         public string PlayerClass
@@ -48,8 +61,9 @@ namespace projectP1{
         }
 
         //Constructor
-        public Player(char identifier)
+        public Player(string playerName, char identifier)
         {
+            this.playerName = playerName;
             switch (identifier)
             {
                 //Fighters are the most durable of the classes. They hit ok and have medium armor
@@ -71,7 +85,7 @@ namespace projectP1{
                 //Wizards have the lowest armor and health, but they can hit like a truck
                 case 'W':
                     this.playerClass = "Wizard";
-                    this.maxHealth = 17;
+                    this.maxHealth = 9;
                     this.currentHealth = maxHealth;
                     this.armorClass = 40;
                     this.attackDamage = 7;

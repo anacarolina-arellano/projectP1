@@ -2,8 +2,7 @@ using System;
 namespace projectP1
 {
   class Enemy:Entity
-  {
-    
+  {    
     
         //Attributes
         //stores the name of the enemy to print on console

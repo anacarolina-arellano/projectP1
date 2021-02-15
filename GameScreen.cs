@@ -10,10 +10,22 @@ namespace projectP1
   {
     //Variables og the game screen
     const int HEIGHT = 14;
-    const int WIDTH = 59;
+    const int WIDTH = 100;
     private Player myPlayer;
     static char[,] map = new char[HEIGHT, WIDTH];
     int currentLevel = 1;
+
+    public int CurrentLevel
+    {
+      get
+      {
+        return currentLevel;
+      }
+      set
+      {
+        currentLevel = value;
+      }
+    }
 
     //Games screen constructor with player as parameter
     public GameScreen(Player myPlayer) 
@@ -24,11 +36,11 @@ namespace projectP1
 
         //Function to read the map from the text file and
         //print it on console
-        public void CreateMap(/*int currentLevel*/)
+        public void CreateMap(int currentLevel)
         {
             // StreamReader
-            string levelFile = "level" /* + currentLevel */ + ".txt";
-            StreamReader sr = new StreamReader("levels/level1.txt"); //??
+            string levelFile = "levels/level"  + currentLevel  + ".txt";
+            StreamReader sr = new StreamReader(levelFile); // import from levelFile
 
             int count = 0;
             while (sr.Peek() >= 0) //There's more content in the file
@@ -143,7 +155,8 @@ namespace projectP1
             map[nextVert, nextHor] = tmp;
         }
         //Reads input from keyboard
-        public void MovePlayer()
+
+        public bool MovePlayer()
         {
             ConsoleKeyInfo _Key = Console.ReadKey();
             switch (_Key.Key)
@@ -174,6 +187,16 @@ namespace projectP1
                     break;
           }
           PrintPlayerStatus();
+          // level up conditions
+          if(map[myPlayer.PosVert, myPlayer.PosHor + 1] == 'E' 
+          && map[myPlayer.PosVert, myPlayer.PosHor + 2] == 'N' 
+          && map[myPlayer.PosVert, myPlayer.PosHor + 3] == 'D')
+          {
+            return false;
+          } else
+          {
+            return true;
+          }          
         }
 
 
@@ -196,7 +219,8 @@ namespace projectP1
 
         public void PrintPlayerStatus()
         {
-          Console.WriteLine("Player Class: {0}    Player Health: {1}/{2}  Score: {3}  Level {4}", myPlayer.PlayerClass, myPlayer.CurrentHealth, myPlayer.MaxHealth, myPlayer.Score, currentLevel);
+          Console.WriteLine("Player Class: {0}    Player Health: {1}/{2}  Score: {3}  Level {4} ", myPlayer.PlayerClass, myPlayer.CurrentHealth, myPlayer.MaxHealth, myPlayer.Score, currentLevel);
+          Console.WriteLine("Player Name: {0}", myPlayer.PlayerName);
         }
     }
 }

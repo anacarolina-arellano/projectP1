@@ -34,5 +34,30 @@ namespace projectP1{
       Console.WriteLine("2. Thief");
       Console.WriteLine("3. Wizard");
     }
+
+    public void startOfGame(){
+      Console.WriteLine("╔═══╗───────╔╗");
+      Console.WriteLine("║╔═╗║───────║║");
+      Console.WriteLine("║╚═╝╠══╦══╦═╝╠╗─╔╗");
+      Console.WriteLine("║╔╗╔╣║═╣╔╗║╔╗║║─║║");
+      Console.WriteLine("║║║╚╣║═╣╔╗║╚╝║╚═╝║");
+      Console.WriteLine("╚╝╚═╩══╩╝╚╩══╩═╗╔╝");
+      Console.WriteLine("─────────────╔═╝║");
+      Console.WriteLine("─────────────╚══╝");
+
+      Console.WriteLine("╔╗─────╔╗");
+      Console.WriteLine("║║────╔╝╚╗");
+      Console.WriteLine("║║──╔═╩╗╔╬══╗");
+      Console.WriteLine("║║─╔╣║═╣║║══╣");
+      Console.WriteLine("║╚═╝║║═╣╚╬══║");
+      Console.WriteLine("╚═══╩══╩═╩══╝");
+
+      Console.WriteLine("╔═══╗──╔╗");
+      Console.WriteLine("║╔═╗║──║║");
+      Console.WriteLine("║║─╚╬══╣║");
+      Console.WriteLine("║║╔═╣╔╗╠╝");
+      Console.WriteLine("║╚╩═║╚╝╠╗");
+      Console.WriteLine("╚═══╩══╩╝");
+    }
   }
 }

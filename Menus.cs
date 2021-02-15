@@ -71,6 +71,14 @@ namespace projectP1{
       Console.WriteLine("──────────╔═╝║");
       Console.WriteLine("──────────╚══╝");
     }
-
+    //If the player's health reaches 0
+    public void gameOver(){
+      Console.WriteLine("╔═══╗─────────╔═══╗");
+      Console.WriteLine("║╔═╗║─────────║╔═╗║");
+      Console.WriteLine("║║─╚╬══╦╗╔╦══╗║║─║╠╗╔╦══╦═╗");
+      Console.WriteLine("║║╔═╣╔╗║╚╝║║═╣║║─║║╚╝║║═╣╔╝");
+      Console.WriteLine("║╚╩═║╔╗║║║║║═╣║╚═╝╠╗╔╣║═╣║");
+      Console.WriteLine("╚═══╩╝╚╩╩╩╩══╝╚═══╝╚╝╚══╩╝");
+    }
   }
 }

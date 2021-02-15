@@ -15,8 +15,8 @@ namespace projectP1
         protected int maxHealth;      //Max health of the entity (can be increased through powerups
         protected int armorClass;            //Percentage chance to be hit by an attack
         protected int attackDamage;         //Damage they deal when they hit with an attack
-        protected int posVert;              //Current position in the grid on the Y Axis
-        protected int posHor;              //Current position in the Grid on the X Axis
+        public int posVert;              //Current position in the grid on the Y Axis
+        public int posHor;              //Current position in the Grid on the X Axis
 
         //Properties
         public char Identifier
@@ -50,6 +50,7 @@ namespace projectP1
                 else if (currentHealth <= 0)
                 {
                     Die();
+                    
                 }
             }
         }

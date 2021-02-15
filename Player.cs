@@ -6,6 +6,8 @@ namespace projectP1{
         string playerName;
         string playerClass; //The player can be a Fighter, a Wizard or a Thief
         int score;  //Gold is used to calculate the score at the end
+        //Stores the value of an enum determining whether its alive or dead
+        int playerStatus = 1;
 
         //Maximum Health that a player can have
         //Based on its class
@@ -64,6 +66,18 @@ namespace projectP1{
           }
         }
 
+        public int PlayerStatus
+        {
+          get
+          {
+            return playerStatus;
+          }
+          set
+          {
+            playerStatus = value;
+          }
+        }
+
         //Constructor
         public Player(string playerName, char identifier)
         {
@@ -99,7 +113,7 @@ namespace projectP1{
         //Player died
         protected override void Die()
         {
-            
+            playerStatus = (int)EntityStatus.DEAD;
         }
     }
 }

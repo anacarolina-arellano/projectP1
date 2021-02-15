@@ -28,6 +28,8 @@ namespace projectP1
         
         public static void Main(string[] args)
         {
+          int keepPlaying = 1;
+          while(keepPlaying == 1) {
             //Declaration of variables
             int MAX_LEVEL = 4;
             Menus myMenu = new Menus();
@@ -120,6 +122,10 @@ namespace projectP1
               gs.CreateMap(gs.CurrentLevel);
               
               //If event(Key control) is occured, new Screen is called
+              if(myPlayer.PlayerStatus == 2){
+                myMenu.gameOver();
+                break;
+              }
               gs.updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor);
 
               bool continueFlag = true;
@@ -139,6 +145,38 @@ namespace projectP1
               }
               gs.CurrentLevel++;    //Increment level
             }
+
+            //Game has ended
+            Console.WriteLine("Press 1 to play again or 0 to quit");
+            //ask for player's answer
+            valid = false;
+            //Catch errors
+            while(!valid){
+              try{
+                keepPlaying = int.Parse(Console.ReadLine());
+                //Player's answerclass is only valid if it's 1 or 0
+                if(keepPlaying == 1 || keepPlaying == 0){
+                    valid = true;
+                }
+                else{
+                  //ask for valid answer
+                  Console.WriteLine("You must enter 1 or 0");
+                }
+              } 
+              catch(FormatException){
+                //ask for an answer that is a number 
+                Console.WriteLine("You must enter a number.");
+              }
+            }
+            //Player wants to keep playing
+            if(keepPlaying == 1){
+              Console.WriteLine("Great! Lets go then!");
+            }
+            //Player wants to quit
+            else{
+              Console.WriteLine("What a last, come back soon!");
+            }
+          }
         }
     }
 }

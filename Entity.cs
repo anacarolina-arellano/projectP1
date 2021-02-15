@@ -4,16 +4,32 @@ namespace projectP1
     //Abstract class, as it will never be instantiated as an Entity, only as a Player or enemy
     abstract class Entity
     {
+        protected enum EntityStatus{
+          ALIVE = 1,
+          DEAD
+        }
         //Attributes
         protected char identifier;    //The Console identifier for the entity
         protected int currentHealth;  //The current health of the entity (never more than maxHealth)
         protected int maxHealth;      //Max health of the entity (can be increased through powerups
         protected int armorClass;            //Percentage chance to be hit by an attack
         protected int attackDamage;         //Damage they deal when they hit with an attack
-        public int posX;              //Current position in the grid on the X Axis
-        public int posY;              //Current position in the Grid on the Y Axis
+        public int posVert;              //Current position in the grid on the Y Axis
+        public int posHor;              //Current position in the Grid on the X Axis
 
         //Properties
+        public char Identifier
+        {
+          get
+          {
+            return identifier;
+          }
+          set
+          {
+            identifier = value;
+          }
+        }
+        
         //Marks the player's current health
         public int CurrentHealth
         {
@@ -76,29 +92,29 @@ namespace projectP1
             }
         }
 
-        //The X position of the entity in the matrix
-        public int PosX
+        //The Vertical position of the entity in the matrix
+        public int PosVert
         {
             get
             {
-                return posX;
+                return posVert;
             }
             set
             {
-                posX = value;
+                posVert = value;
             }
         }
 
-        //The Y position of the entity in the matrix
-        public int PosY
+        //The Horizontal position of the entity in the matrix
+        public int PosHor
         {
             get
             {
-                return posY;
+                return posHor;
             }
             set
             {
-                posY = value;
+                posHor = value;
             }
         }
         

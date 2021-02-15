@@ -6,27 +6,32 @@ using System.IO;
 
 namespace projectP1
 {
-    class GameScreen
+  class GameScreen
+  {
+    //Variables og the game screen
+    const int HEIGHT = 14;
+    const int WIDTH = 59;
+    private Player myPlayer;
+    static char[,] map = new char[HEIGHT, WIDTH];
+    int currentLevel = 1;
+
+    //Games screen constructor with player as parameter
+    public GameScreen(Player myPlayer) 
     {
-        const int HEIGHT = 14;
-        const int WIDTH = 59;
-        public List<Enemy> enemiesInMap = new List<Enemy>();
-        private Player myPlayer;
-        static char[,] map = new char[HEIGHT, WIDTH];
+        this.myPlayer = myPlayer;
+        
+    }
 
-        public GameScreen(Player myPlayer)
-        {
-            this.myPlayer = myPlayer;
-        }
-
-        public void CreateMap(/*int levelNumber*/)
+        //Function to read the map from the text file and
+        //print it on console
+        public void CreateMap(/*int currentLevel*/)
         {
             // StreamReader
-            string levelFile = "level" /* + levelNumber */ + ".txt";
-            StreamReader sr = new StreamReader("../../levels/test.txt"); //??
+            string levelFile = "level" /* + currentLevel */ + ".txt";
+            StreamReader sr = new StreamReader("levels/level1.txt"); //??
 
             int count = 0;
-            while (sr.Peek() >= 0)
+            while (sr.Peek() >= 0) //There's more content in the file
             {
                 char[] s = sr.ReadLine().ToCharArray();
                 for (int i = 0; i < s.Length; i++)
@@ -36,7 +41,7 @@ namespace projectP1
                 count++;
             }
 
-
+            //Movement of enemies
             int enemyIndex = 0;
             for (int i = 0; i < HEIGHT; i++)
             {
@@ -45,7 +50,7 @@ namespace projectP1
                     //Console.Write(map[i, j]);
                     if (map[i, j] == '$')
                     {
-                        myPlayer.PosX = i; myPlayer.PosY = j;
+                        myPlayer.PosVert = i; myPlayer.PosHor = j;
                     }
 
                     //Checks for enemies in tilemap and spawns them in
@@ -60,15 +65,58 @@ namespace projectP1
             sr.Close();
 
         }
-
-        public void updateMatrix(int curX, int curY, int nextX, int nextY)
+        public void updateMatrix(int curVert, int curHor, int nextVert, int nextHor)
         {
-            //Console.WriteLine("cx= {0} cy= {1}   dx= {2} dy= {3}", curX, curY, nextX, nextY);
-            
-            char tmp = map[curX, curY];
-            map[curX, curY] = map[nextX, nextY];
-            map[nextX, nextY] = tmp;
+            //Console.WriteLine("cx= {0} cy= {1}   dx= {2} dy= {3}", curVert, curHor, nextVert, nextHor);
+            if (NextFlag(nextVert, nextHor)) // if we can go, swap the position and update next position too.
+            {
+                SwapPosition(curVert, curHor, nextVert, nextHor);
+                myPlayer.PosVert = nextVert;
+                myPlayer.PosHor = nextHor;
+            }
 
+            // enemy movement
+            for (int i = 0; i < HEIGHT; i++)
+            {
+                for (int j = 0; j < WIDTH; j++)
+                {
+                    if(map[i, j] == 'R' || map[i, j] == 'B' || map[i, j] == 'S' || map[i, j] == 'G' || map[i, j] == 'M')        {
+                        //Console.Write(map[i, j]);
+                        //1. Check enemy
+                        //2. if player is beside of enemy -- do not move
+                        //3. If enemy - random funcion
+                        //4. if We can go
+                        //5. swap location
+                        if (!CheckPlayer(i, j))
+                        {
+                            Random rand = new Random();                            
+                            switch (rand.Next(1, 5))
+                            {
+                                case 1:
+                                    if (map[i-1, j] == '*')
+                                        SwapPosition(i, j, i-1, j);
+                                    break;
+                                case 2:
+                                    if (map[i, j-1] == '*')
+                                        SwapPosition(i, j, i, j-1);
+                                    break;
+                                case 3:
+                                    if (map[i+1, j] == '*')
+                                        SwapPosition(i, j, i+1, j);
+                                    break;
+                                case 4:
+                                    if (map[i, j+1] == '*')
+                                        SwapPosition(i, j, i, j+1);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }                    
+                }                
+            }
+
+            // view update
             for (int i = 0; i < HEIGHT; i++)
             {
                 for (int j = 0; j < WIDTH; j++)
@@ -77,68 +125,78 @@ namespace projectP1
                 }
                 Console.WriteLine();
             }
-            myPlayer.PosX = nextX;
-            myPlayer.PosY = nextY;
+            
         }
 
-        public char getValueFromMap(int curX, int curY)
+        //
+        public bool CheckPlayer(int vert, int hor)
         {
-            return map[curX, curY];
+            if (map[vert - 1, hor] == '$' || map[vert, hor - 1] == '$' || map[vert + 1, hor] == '$' || map[vert, hor + 1] == '$')
+                return true;
+            return false;
         }
-
+        //movememt of the enemy
+        public void SwapPosition(int curVert, int curHor, int nextVert, int nextHor)
+        {
+            char tmp = map[curVert, curHor];
+            map[curVert, curHor] = map[nextVert, nextHor];
+            map[nextVert, nextHor] = tmp;
+        }
+        //Reads input from keyboard
         public void MovePlayer()
         {
             ConsoleKeyInfo _Key = Console.ReadKey();
             switch (_Key.Key)
             {
-                case ConsoleKey.RightArrow:
+                case ConsoleKey.RightArrow: 
                     //Console.WriteLine("Right Arrow");                        
                     Console.Clear();
-                    if (getValueFromMap(myPlayer.PosX, myPlayer.PosY + 1) == '+' || getValueFromMap(myPlayer.PosX, myPlayer.PosY + 1) == '*')
-                        updateMatrix(myPlayer.PosX, myPlayer.PosY, myPlayer.PosX, myPlayer.PosY + 1);
-                    else
-                        updateMatrix(myPlayer.PosX, myPlayer.PosY, myPlayer.PosX, myPlayer.PosY);
+                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor + 1);                    
                     break;
                 case ConsoleKey.LeftArrow:
-                    //Console.WriteLine("Left Arrow");                        
                     Console.Clear();
-                    if (getValueFromMap(myPlayer.PosX, myPlayer.PosY - 1) == '+' || getValueFromMap(myPlayer.PosX, myPlayer.PosY - 1) == '*')
-                        updateMatrix(myPlayer.PosX, myPlayer.PosY, myPlayer.PosX, myPlayer.PosY - 1);
-                    else
-                        updateMatrix(myPlayer.PosX, myPlayer.PosY, myPlayer.PosX, myPlayer.PosY);
+                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor - 1);        
                     break;
                 case ConsoleKey.UpArrow:
                     //Console.WriteLine("Up Arrow");                        
                     Console.Clear();
-                    if (getValueFromMap(myPlayer.PosX - 1, myPlayer.PosY) == '+' || getValueFromMap(myPlayer.PosX - 1, myPlayer.PosY) == '*')
-                        updateMatrix(myPlayer.PosX, myPlayer.PosY, myPlayer.PosX - 1, myPlayer.PosY);
-                    else
-                        updateMatrix(myPlayer.PosX, myPlayer.PosY, myPlayer.PosX, myPlayer.PosY);
+                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert - 1, myPlayer.PosHor);                    
                     break;
                 case ConsoleKey.DownArrow:
                     //Console.WriteLine("Down Arrow");
                     Console.Clear();
-                    if (getValueFromMap(myPlayer.PosX + 1, myPlayer.PosY) == '+' || getValueFromMap(myPlayer.PosX + 1, myPlayer.PosY) == '*')
-                        updateMatrix(myPlayer.PosX, myPlayer.PosY, myPlayer.PosX + 1, myPlayer.PosY);
-                    else
-                        updateMatrix(myPlayer.PosX, myPlayer.PosY, myPlayer.PosX, myPlayer.PosY);
+                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert + 1, myPlayer.PosHor);                    
                     break;
                 case ConsoleKey.Escape:
                     System.Environment.Exit(0);
                     break;
                 default:
                     break;
-            }
+          }
+          PrintPlayerStatus();
         }
 
-        public void SpawnEnemies( int posX, int posY, char identifier, int id)
+
+        public bool NextFlag(int curVert, int curHor)
         {
-            enemiesInMap.Add(new Enemy(identifier, posX, posY, id));
+            if (map[curVert, curHor] == '*' || map[curVert, curHor] == '+')
+                return true;
+            return false;
         }
 
+        public void SpawnEnemies( int posVert, int posHor, char identifier, int id)
+        {
+            
+        }
+        
         public void DespawnEnemies(int id)
         {
-            enemiesInMap.RemoveAt(id);
+            
+        }
+
+        public void PrintPlayerStatus()
+        {
+          Console.WriteLine("Player Class: {0}    Player Health: {1}/{2}  Score: {3}  Level {4}", myPlayer.PlayerClass, myPlayer.CurrentHealth, myPlayer.MaxHealth, myPlayer.Score, currentLevel);
         }
     }
 }

@@ -3,12 +3,13 @@ namespace projectP1
 {
   class Enemy:Entity
   {
+    
+    
         //Attributes
-        int enemyType; //There will be 5 enemy types: 0 R (rat), 1 B (bat), 2 S(skeleton), 3 G(goblin), 4 M(minotaur)
-        //This references the values placed on top
-        static char[] enemyIdentifiers = { 'R','B','S','G','M' };
         //stores the name of the enemy to print on console
         string enemyName;
+        //Stores the value of an enum determining whether its alive or dead
+        int enemyStatus = 1;
 
         int enemyID;
 
@@ -25,15 +26,6 @@ namespace projectP1
             }
         }
 
-        //ReadOnly, as it should never be changed after enemy creation;
-        public int EnemyType
-        {
-            get
-            {
-                return enemyType;
-            }
-        }
-
         //ReadOnly, as it should never be changed after enemy creation, used for messages in the console
         public string EnemyName
         {
@@ -42,6 +34,20 @@ namespace projectP1
                 return enemyName;
             }
         }
+
+        //Changed only in the case that Die() is called
+        public int EnemyStatus
+        {
+            get
+            {
+                return enemyStatus;
+            }
+            set
+            {
+              enemyStatus = value;
+            }
+        }
+
 
         //Returns the value of the enemy ID, so that if there are many enemy instances, damage is stored on the correct one
         public int EnemyID
@@ -53,10 +59,10 @@ namespace projectP1
         }
 
         //Constructor
-        public Enemy(char identifier, int posX, int posY, int enemyID)
+        public Enemy(char identifier, int posVert, int posHor, int enemyID)
         {
-            this.posX = posX;
-            this.posY = posY;
+            this.posVert = posVert;
+            this.posHor = posHor;
             switch (identifier)
             {
                 //Rats are the weakest of enemies, meaning they are relatively easy to hit, don't hit really hard, and have medium to low health
@@ -113,7 +119,7 @@ namespace projectP1
         //When an enemy dies, its space must be replaced with a loot drop or with the floor value, not game over like the player
         protected override void Die()
         {
-            
+            enemyStatus = (int)EntityStatus.DEAD;
         }
     }
 }

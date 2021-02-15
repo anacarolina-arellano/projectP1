@@ -6,40 +6,55 @@ using System.IO;
 
 namespace projectP1
 {
-  class GameScreen
-  {
-    //Variables og the game screen
-    const int HEIGHT = 14;
-    const int WIDTH = 100;
-    private Player myPlayer;
-    static char[,] map = new char[HEIGHT, WIDTH];
-    int currentLevel = 1;
-
-    public int CurrentLevel
+    class GameScreen
     {
-      get
-      {
-        return currentLevel;
-      }
-      set
-      {
-        currentLevel = value;
-      }
-    }
+        //Variables og the game screen
+        const int HEIGHT = 14;
+        const int WIDTH = 100;
+        private Player myPlayer;
+        private List<Enemy> enemies = new List<Enemy>();
+        static char[,] map = new char[HEIGHT, WIDTH];
+        int currentLevel = 1;
 
-    //Games screen constructor with player as parameter
-    public GameScreen(Player myPlayer) 
-    {
-        this.myPlayer = myPlayer;
-        
-    }
+        //References the current level the player is at
+        public int CurrentLevel
+        {
+            get
+            {
+                return currentLevel;
+            }
+            set
+            {
+                currentLevel = value;
+            }
+        }
+
+        public List<Enemy> Enemies
+        {
+            get
+            {
+                return enemies;
+            }
+        }
+
+
+        //Games screen constructor with player as parameter
+        public GameScreen(Player myPlayer)
+        {
+            this.myPlayer = myPlayer;
+
+        }
+
 
         //Function to read the map from the text file and
         //print it on console
         public void CreateMap(int currentLevel)
         {
+            //Clears enemy list for future levels
+            enemies.Clear();
+
             // StreamReader
-            string levelFile = "levels/level"  + currentLevel  + ".txt";
+            string levelFile = "../../levels/level" + currentLevel + ".txt";
             StreamReader sr = new StreamReader(levelFile); // import from levelFile
 
             int count = 0;
@@ -92,40 +107,66 @@ namespace projectP1
             {
                 for (int j = 0; j < WIDTH; j++)
                 {
-                    if(map[i, j] == 'R' || map[i, j] == 'B' || map[i, j] == 'S' || map[i, j] == 'G' || map[i, j] == 'M')        {
+                    if (map[i, j] == 'R' || map[i, j] == 'B' || map[i, j] == 'S' || map[i, j] == 'G' || map[i, j] == 'M')
+                    {
                         //Console.Write(map[i, j]);
                         //1. Check enemy
                         //2. if player is beside of enemy -- do not move
                         //3. If enemy - random funcion
                         //4. if We can go
                         //5. swap location
-                        if (!CheckPlayer(i, j))
+                        foreach (Enemy movingEnemy in enemies)
                         {
-                            Random rand = new Random();                            
-                            switch (rand.Next(1, 5))
+                            if (!CheckPlayer(i, j) && movingEnemy.PosVert == i && movingEnemy.PosHor == j && !movingEnemy.AlreadyMoved)
                             {
-                                case 1:
-                                    if (map[i-1, j] == '*')
-                                        SwapPosition(i, j, i-1, j);
-                                    break;
-                                case 2:
-                                    if (map[i, j-1] == '*')
-                                        SwapPosition(i, j, i, j-1);
-                                    break;
-                                case 3:
-                                    if (map[i+1, j] == '*')
-                                        SwapPosition(i, j, i+1, j);
-                                    break;
-                                case 4:
-                                    if (map[i, j+1] == '*')
-                                        SwapPosition(i, j, i, j+1);
-                                    break;
-                                default:
-                                    break;
+                                Random rand = new Random();
+                                rand.Next();
+                                int newRandomInt = rand.Next(1, 5);
+                                movingEnemy.AlreadyMoved = true;
+                                switch (newRandomInt)
+                                {
+                                    case 1:
+                                        if (map[i - 1, j] == '*')
+                                        {
+                                            movingEnemy.PosVert = i - 1;
+                                            movingEnemy.PosHor = j;
+                                            SwapPosition(i, j, i - 1, j);
+                                        }
+
+                                        break;
+                                    case 2:
+                                        if (map[i, j - 1] == '*')
+                                        {
+                                            movingEnemy.PosVert = i;
+                                            movingEnemy.PosHor = j - 1;
+                                            SwapPosition(i, j, i, j - 1);
+                                        }
+
+                                        break;
+                                    case 3:
+                                        if (map[i + 1, j] == '*')
+                                        {
+                                            movingEnemy.PosVert = i + 1;
+                                            movingEnemy.PosHor = j;
+                                            SwapPosition(i, j, i + 1, j);
+                                        }
+                                        break;
+                                    case 4:
+                                        if (map[i, j + 1] == '*')
+                                        {
+                                            movingEnemy.PosVert = i;
+                                            movingEnemy.PosHor = j + 1;
+                                            SwapPosition(i, j, i, j + 1);
+                                        }
+
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
-                    }                    
-                }                
+                    }
+                }
             }
 
             // view update 
@@ -137,7 +178,12 @@ namespace projectP1
                 }
                 Console.WriteLine();
             }
-            
+
+            foreach(Enemy movedEnemy in enemies)
+            {
+                movedEnemy.AlreadyMoved = false;
+            }
+
         }
 
         
@@ -165,24 +211,25 @@ namespace projectP1
             ConsoleKeyInfo _Key = Console.ReadKey();
             switch (_Key.Key)
             {
-                case ConsoleKey.RightArrow: 
+                case ConsoleKey.RightArrow:
                     //Console.WriteLine("Right Arrow");                        
                     Console.Clear();
-                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor + 1);                    
+                    //if(map[myPlayer.PosVert,myPlayer.PosHor + 1] != )
+                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor + 1);
                     break;
                 case ConsoleKey.LeftArrow:
                     Console.Clear();
-                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor - 1);        
+                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor - 1);
                     break;
                 case ConsoleKey.UpArrow:
                     //Console.WriteLine("Up Arrow");                        
                     Console.Clear();
-                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert - 1, myPlayer.PosHor);                    
+                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert - 1, myPlayer.PosHor);
                     break;
                 case ConsoleKey.DownArrow:
                     //Console.WriteLine("Down Arrow");
                     Console.Clear();
-                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert + 1, myPlayer.PosHor);                    
+                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert + 1, myPlayer.PosHor);
                     break;
                 case ConsoleKey.Escape:
                     System.Environment.Exit(0);
@@ -191,6 +238,7 @@ namespace projectP1
                     break;
           }
           PrintPlayerStatus();
+           DebugEnemyPos();
           // level up conditions
           // if player meet 'E','N','D', it  returns false (go to next level or finish this game) 
           if(map[myPlayer.PosVert, myPlayer.PosHor + 1] == 'E' 
@@ -202,6 +250,7 @@ namespace projectP1
           {
             return true;
           }          
+           
         }
 
 
@@ -214,20 +263,36 @@ namespace projectP1
             return false;
         }
 
-        public void SpawnEnemies( int posVert, int posHor, char identifier, int id)
+        public void SpawnEnemies(int posVert, int posHor, char identifier, int id)
         {
-            
+            enemies.Add(new Enemy(identifier, posVert, posHor));
         }
-        
-        public void DespawnEnemies(int id)
+
+        public void DespawnEnemies(int posVert, int posHor)
         {
-            
+            foreach (Enemy deadEnemy in enemies)
+            {
+                if (deadEnemy.EnemyStatus == 0)
+                {
+                    map[posVert, posHor] = '+';
+                    enemies.Remove(deadEnemy);
+                    enemies.TrimExcess();
+                }
+            }
         }
 
         public void PrintPlayerStatus()
         {
-          Console.WriteLine("Player Class: {0}    Player Health: {1}/{2}  Score: {3}  Level {4} ", myPlayer.PlayerClass, myPlayer.CurrentHealth, myPlayer.MaxHealth, myPlayer.Score, currentLevel);
-          Console.WriteLine("Player Name: {0}", myPlayer.PlayerName);
+            Console.WriteLine("Player Class: {0}    Player Health: {1}/{2}  Score: {3}  Level {4} ", myPlayer.PlayerClass, myPlayer.CurrentHealth, myPlayer.MaxHealth, myPlayer.Score, currentLevel);
+            Console.WriteLine("Player Name: {0}", myPlayer.PlayerName);
+        }
+
+        public void DebugEnemyPos()
+        {
+            foreach (Enemy aliveEnemy in enemies)
+            {
+                Console.WriteLine("{0}: posVert: {1} posHor: {2} health: {3}", aliveEnemy.EnemyName, aliveEnemy.PosVert, aliveEnemy.PosHor, aliveEnemy.CurrentHealth);
+            }
         }
     }
 }

@@ -10,9 +10,9 @@ namespace projectP1
         //Stores the value of an enum determining whether its alive or dead
         int enemyStatus = 1;
 
-        int enemyID;
+        bool alreadyMoved = false;
 
-        //Both types of entities behave differentyl in how their MaxHealth fluctuates in game, so they have different properties
+        //Both types of entities behave differently in how their MaxHealth fluctuates in game, so they have different properties
         public override int MaxHealth
         {
             get
@@ -47,21 +47,24 @@ namespace projectP1
             }
         }
 
-
-        //Returns the value of the enemy ID, so that if there are many enemy instances, damage is stored on the correct one
-        public int EnemyID
+        public bool AlreadyMoved
         {
             get
             {
-                return enemyID;
+                return alreadyMoved;
+            }
+            set
+            {
+                alreadyMoved = value;
             }
         }
 
         //Constructor
-        public Enemy(char identifier, int posVert, int posHor, int enemyID)
+        public Enemy(char identifier, int posVert, int posHor)
         {
             this.posVert = posVert;
             this.posHor = posHor;
+            this.identifier = identifier;
             switch (identifier)
             {
                 //Rats are the weakest of enemies, meaning they are relatively easy to hit, don't hit really hard, and have medium to low health
@@ -71,7 +74,6 @@ namespace projectP1
                     this.currentHealth = maxHealth;
                     this.armorClass = 20;
                     this.attackDamage = 2;
-                    this.enemyID = enemyID;
                     break;
                 //Bats are nimbler than rats, but hit just as hard. They have a bit less health to compensate their nimbleness
                 case 'B':
@@ -80,7 +82,6 @@ namespace projectP1
                     this.currentHealth = maxHealth;
                     this.armorClass = 60;
                     this.attackDamage = 2;
-                    this.enemyID = enemyID;
                     break;
                 //While Rats and skeletons threaten the players when they come in numbers, Skeletons start to pose a real threat on their own. They have less armor than a bat, but hit harder and are more resilient
                 case 'S':
@@ -89,7 +90,6 @@ namespace projectP1
                     this.currentHealth = maxHealth;
                     this.armorClass = 40;
                     this.attackDamage = 5;
-                    this.enemyID = enemyID;
                     break;
                 //Goblins don't hit hard and fall easily, but they are slippery, making them a threat if they appear supported by a larger scary creature, or in big numbers
                 case 'G':
@@ -98,7 +98,6 @@ namespace projectP1
                     this.currentHealth = maxHealth;
                     this.armorClass = 50;
                     this.attackDamage = 3;
-                    this.enemyID = enemyID;
                     break;
                 //Minotaurs are the strongest enemies you'll face. Easy to hit but hard to knock down, if you attack them without healing you are sure to fall in battle
                 case 'M':
@@ -106,8 +105,7 @@ namespace projectP1
                     this.maxHealth = 25;
                     this.currentHealth = maxHealth;
                     this.armorClass = 30;
-                    this.attackDamage = 8;
-                    this.enemyID = enemyID;
+                    this.attackDamage = 6;
                     break;
 
 

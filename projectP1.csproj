@@ -79,6 +79,7 @@
     <Compile Include="Entity.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="main.cs" />
+    <Compile Include="Menus.cs" />
     <Compile Include="Player.cs" />
   </ItemGroup>
   <ItemGroup>

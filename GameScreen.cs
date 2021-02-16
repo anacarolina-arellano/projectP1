@@ -9,13 +9,15 @@ namespace projectP1
     class GameScreen
     {
         //Variables og the game screen
-        const int HEIGHT = 14;
+        const int HEIGHT = 20;
         const int WIDTH = 100;
         private Player myPlayer;
         private List<Enemy> enemies = new List<Enemy>();
         static char[,] map = new char[HEIGHT, WIDTH];
         int currentLevel = 1;
 
+        //Sets the current level to the received value
+        //Returns the current level
         public int CurrentLevel
         {
             get
@@ -27,7 +29,7 @@ namespace projectP1
                 currentLevel = value;
             }
         }
-
+        
         public List<Enemy> Enemies
         {
             get
@@ -51,7 +53,7 @@ namespace projectP1
             enemies.Clear();
 
             // StreamReader
-            string levelFile = "../../levels/level" + currentLevel + ".txt";
+            string levelFile = "levels/level" + currentLevel + ".txt";
             StreamReader sr = new StreamReader(levelFile); // import from levelFile
 
             int count = 0;

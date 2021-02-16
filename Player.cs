@@ -66,6 +66,8 @@ namespace projectP1{
           }
         }
 
+        //Sets the player's status to the received value
+        //Returns the player's status
         public int PlayerStatus
         {
           get

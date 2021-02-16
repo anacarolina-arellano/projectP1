@@ -117,6 +117,8 @@ namespace projectP1
             
             //game starts
             myMenu.startOfGame();
+            Thread.Sleep(1000); // 1 second delay and start game
+            Console.Clear();
             while(true){
               //Creation of map
               gs.CreateMap(gs.CurrentLevel);

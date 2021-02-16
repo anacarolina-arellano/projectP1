@@ -1,14 +1,14 @@
 using System;
 namespace projectP1
 {
-  class Enemy:Entity
-  {    
-    
+    class Enemy : Entity
+    {
+
         //Attributes
         //stores the name of the enemy to print on console
         string enemyName;
         //Stores the value of an enum determining whether its alive or dead
-        int enemyStatus = 1;
+        int enemyStatus = (int)EntityStatus.ALIVE;
 
         bool alreadyMoved = false;
 
@@ -43,7 +43,7 @@ namespace projectP1
             }
             set
             {
-              enemyStatus = value;
+                enemyStatus = value;
             }
         }
 
@@ -59,7 +59,7 @@ namespace projectP1
                 alreadyMoved = value;
             }
         }
-        
+
 
         //Constructor
         public Enemy(char identifier, int posVert, int posHor)
@@ -113,11 +113,16 @@ namespace projectP1
 
             }
         }
-        
+
+        public override void Attack(Entity receiving)
+        {
+            base.Attack(receiving);
+        }
 
         //When an enemy dies, its space must be replaced with a loot drop or with the floor value, not game over like the player
         protected override void Die()
         {
+            Console.WriteLine("The {0} has died!", enemyName);
             enemyStatus = (int)EntityStatus.DEAD;
         }
     }

@@ -83,7 +83,10 @@
     <Compile Include="Player.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="levels\test.txt" />
+    <Content Include="levels\level1.txt" />
+    <Content Include="levels\level2.txt" />
+    <Content Include="levels\level3.txt" />
+    <Content Include="levels\level4.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include=".git\objects\info\" />

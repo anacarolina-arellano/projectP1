@@ -5,9 +5,10 @@ namespace projectP1
     abstract class Entity
     {
         //possible status of player and enemies
-        protected enum EntityStatus{
-          ALIVE = 1,
-          DEAD
+        protected enum EntityStatus
+        {
+            ALIVE = 1,
+            DEAD
         }
         //Attributes
         protected char identifier;    //The Console identifier for the entity
@@ -21,16 +22,16 @@ namespace projectP1
         //Properties
         public char Identifier
         {
-          get
-          {
-            return identifier;
-          }
-          set
-          {
-            identifier = value;
-          }
+            get
+            {
+                return identifier;
+            }
+            set
+            {
+                identifier = value;
+            }
         }
-        
+
         //Marks the player's current health
         public int CurrentHealth
         {
@@ -46,11 +47,11 @@ namespace projectP1
                 {
                     currentHealth = maxHealth;
                 }
-                //If the pentity's health reaches 0, they die
+                //If the entity's health reaches 0, they die
                 else if (currentHealth <= 0)
                 {
                     Die();
-                    
+
                 }
             }
         }
@@ -119,25 +120,28 @@ namespace projectP1
                 posHor = value;
             }
         }
-        
+
 
         //Happens whenever an entity collides with another, and happens the same way for both types of entities
-        protected virtual void Attack(Entity receiving)
+        public virtual void Attack(Entity receiving)
         {
             Random randomNumber = new Random();
             int hitRoll = randomNumber.Next(1, 100);
-            
+
             //Whenever the character hits, it deals iits attackDamage as damage to the other's health.
             if (hitRoll >= receiving.armorClass)
             {
                 receiving.TakeDamage(AttackDamage);
+                return;
             }
+            Console.WriteLine("It misses!");
 
         }
 
         //Both types of entities take damage in the same way
-        protected virtual void TakeDamage( int damageDealt)
+        protected virtual void TakeDamage(int damageDealt)
         {
+            Console.WriteLine("The Attack hit! It dealt {0} damage!", damageDealt);
             CurrentHealth -= damageDealt;
         }
 

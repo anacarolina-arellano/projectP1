@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Threading;
 
 namespace projectP1
 {
@@ -313,10 +313,25 @@ namespace projectP1
                     System.Environment.Exit(0);
                     break;
                 default:
+                    Console.Clear();
+                    //Reprint map on invalid keypress, so that it doesn't print everything a million times
+                    for (int i = 0; i < HEIGHT; i++)
+                    {
+                        for (int j = 0; j < WIDTH; j++)
+                        {
+                            Console.Write(map[i, j]);
+                        }
+                        Console.WriteLine();
+                    }
                     break;
             }
             PrintPlayerStatus();
+
+            //Delays keystrokes so that the screen has time to refresh
+            Thread.Sleep(100);
+
             //DebugEnemyPos();
+
             // level up conditions
             // if player meet 'E','N','D', it  returns false (go to next level or finish this game) 
             if (map[myPlayer.PosVert, myPlayer.PosHor + 1] == 'E'
@@ -358,7 +373,7 @@ namespace projectP1
         public void PrintPlayerStatus()
         {
             Console.WriteLine("Player Class: {0}    Player Health: {1}/{2}     Level {3} ", myPlayer.PlayerClass, myPlayer.CurrentHealth, myPlayer.MaxHealth, currentLevel);
-            Console.WriteLine("Player Name: {0} Player Status: {1}", myPlayer.PlayerName, myPlayer.PlayerStatus); ;
+            Console.WriteLine("Player Name: {0}", myPlayer.PlayerName); ;
         }
 
 

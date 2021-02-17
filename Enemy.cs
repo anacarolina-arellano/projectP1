@@ -1,3 +1,11 @@
+/*
+José Ignacio Ferrer / Daiyong Kim / Ana Carolina Arellano
+Enemy.cs
+Final Project
+Intro to Programming in C#
+February 16, 2021
+*/
+
 using System;
 namespace projectP1
 {
@@ -113,7 +121,7 @@ namespace projectP1
 
             }
         }
-
+        //Function to make damage to the player
         public override void Attack(Entity receiving)
         {
             base.Attack(receiving);

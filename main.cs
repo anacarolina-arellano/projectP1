@@ -1,3 +1,11 @@
+/*
+José Ignacio Ferrer / Daiyong Kim / Ana Carolina Arellano
+main.cs
+Final Project
+Intro to Programming in C#
+February 16, 2021
+*/
+
 using System;
 using System.Threading;
 

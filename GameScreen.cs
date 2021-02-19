@@ -7,7 +7,6 @@ February 16, 2021
 */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -38,6 +37,7 @@ namespace projectP1
             }
         }
 
+        //Stores all of the currently existing enemies in a list
         public List<Enemy> Enemies
         {
             get
@@ -98,6 +98,8 @@ namespace projectP1
             sr.Close();
 
         }
+
+        //Updates the maps matrix every time there is a change
         public void updateMatrix(int curVert, int curHor, int nextVert, int nextHor)
         {
             //Console.WriteLine("cx= {0} cy= {1}   dx= {2} dy= {3}", curVert, curHor, nextVert, nextHor);
@@ -131,6 +133,7 @@ namespace projectP1
                                 movingEnemy.AlreadyMoved = true;
                                 switch (((rand.Next(1, 5) + count++) % 4) + 1)
                                 {
+                                    //Enemy move up
                                     case 1:
                                         if (map[i - 1, j] == '*')
                                         {
@@ -185,14 +188,15 @@ namespace projectP1
                 Console.WriteLine();
             }
 
+            //reset alreadyMoved flag
             foreach (Enemy movedEnemy in enemies)
             {
                 movedEnemy.AlreadyMoved = false;
             }
 
         }
-
-
+        
+        //Checks if the player is next to an enemy so that they don't move
         public bool CheckPlayer(int vert, int hor)
         {
             // Enemy checks the existance of player using 4 directions Radar
@@ -201,7 +205,7 @@ namespace projectP1
             return false;
         }
 
-
+        //Moves enemies and entities by swapping their place with the next spot
         public void SwapPosition(int curVert, int curHor, int nextVert, int nextHor)
         {
             //movememt of the player and the enemy
@@ -210,112 +214,71 @@ namespace projectP1
             map[nextVert, nextHor] = tmp;
         }
 
+        //Makes it so that the player either attacks or move
+        public void PlayerAttack(int nextVert, int nextHor)
+        {
+            bool attacking = false;
+            char[] enemyChars = { 'R', 'B', 'S', 'G', 'M' };
+            foreach(char nextEnemy in enemyChars)
+            {
+                if(map[nextVert, nextHor]==nextEnemy)
+                {
+                    attacking = true;
+                }
+            }
 
+            if (attacking)
+            {
+                //It then checks through all the enmies until it finds the one at the correct position
+                foreach (Enemy attackedEnemy in enemies)
+                {
+                    if (attackedEnemy.PosVert == nextVert && (nextHor == attackedEnemy.PosHor))
+                    {
+                        //The player attacks the enemy
+                        myPlayer.Attack(attackedEnemy);
+
+                        //if the enemy is still alive, it doesn't despawn it, if it is dead, it removes it.
+                        if (!attackedEnemy.EntityStatus)
+                        {
+                            DespawnEnemies(attackedEnemy);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        
+        //Makes the Player move or attack depending on where they are at or if they move towards an enemy
         public bool MovePlayer()
         {
             //Reads input from keyboard
+            int nextVert = myPlayer.PosVert;
+            int nextHor = myPlayer.PosHor;
             ConsoleKeyInfo _Key = Console.ReadKey();
             switch (_Key.Key)
             {
                 case ConsoleKey.RightArrow:
                     //Console.WriteLine("Right Arrow");                        
                     Console.Clear();
-
-                    //This unusually long condition checks if there is an enemy in the position the player is moving in, prompting an attack
-                    if (map[myPlayer.PosVert, myPlayer.PosHor + 1] == 'R' || map[myPlayer.PosVert, myPlayer.PosHor + 1] == 'B' || map[myPlayer.PosVert, myPlayer.PosHor + 1] == 'G' || map[myPlayer.PosVert, myPlayer.PosHor + 1] == 'S' || map[myPlayer.PosVert, myPlayer.PosHor + 1] == 'M')
-                    {
-                        //It then checks through all the enmies until it finds the one at the correct position
-                        foreach (Enemy attackedEnemy in enemies)
-                        {
-                            if (attackedEnemy.PosVert == myPlayer.PosVert && (myPlayer.PosHor + 1 == attackedEnemy.PosHor))
-                            {
-                                //The player attacks the enemy
-                                myPlayer.Attack(attackedEnemy);
-
-                                //if the enemy is still alive, it doesn't despawn it, if it is dead, it removes it.
-                                if (attackedEnemy.EnemyStatus == 2)
-                                {
-                                    DespawnEnemies(attackedEnemy);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor + 1);
+                    nextVert = myPlayer.PosVert;
+                    nextHor = myPlayer.PosHor + 1;
                     break;
                 case ConsoleKey.LeftArrow:
                     Console.Clear();
-                    //This unusually long condition checks if there is an enemy in the position the player is moving in, prompting an attack
-                    if (map[myPlayer.PosVert, myPlayer.PosHor - 1] == 'R' || map[myPlayer.PosVert, myPlayer.PosHor - 1] == 'B' || map[myPlayer.PosVert, myPlayer.PosHor - 1] == 'G' || map[myPlayer.PosVert, myPlayer.PosHor - 1] == 'S' || map[myPlayer.PosVert, myPlayer.PosHor - 1] == 'M')
-                    {
-                        //It then checks through all the enmies until it finds the one at the correct position
-                        foreach (Enemy attackedEnemy in enemies)
-                        {
-                            if (attackedEnemy.PosVert == myPlayer.PosVert && (myPlayer.PosHor - 1 == attackedEnemy.PosHor))
-                            {
-                                //The player attacks the enemy
-                                myPlayer.Attack(attackedEnemy);
-
-                                //if the enemy is still alive, it doesn't despawn it, if it is dead, it removes it.
-                                if (attackedEnemy.EnemyStatus == 2)
-                                {
-                                    DespawnEnemies(attackedEnemy);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor - 1);
+                    nextVert = myPlayer.PosVert;
+                    nextHor = myPlayer.PosHor - 1;
                     break;
                 case ConsoleKey.UpArrow:
                     //Console.WriteLine("Up Arrow");                        
                     Console.Clear();
-                    //This unusually long condition checks if there is an enemy in the position the player is moving in, prompting an attack
-                    if (map[myPlayer.PosVert - 1, myPlayer.PosHor] == 'R' || map[myPlayer.PosVert - 1, myPlayer.PosHor] == 'B' || map[myPlayer.PosVert - 1, myPlayer.PosHor] == 'G' || map[myPlayer.PosVert - 1, myPlayer.PosHor] == 'S' || map[myPlayer.PosVert - 1, myPlayer.PosHor] == 'M')
-                    {
-                        //It then checks through all the enmies until it finds the one at the correct position
-                        foreach (Enemy attackedEnemy in enemies)
-                        {
-                            if ((attackedEnemy.PosVert == myPlayer.PosVert - 1) && (myPlayer.PosHor == attackedEnemy.PosHor))
-                            {
-                                //The player attacks the enemy
-                                myPlayer.Attack(attackedEnemy);
-
-                                //if the enemy is still alive, it doesn't despawn it, if it is dead, it removes it.
-                                if (attackedEnemy.EnemyStatus == 2)
-                                {
-                                    DespawnEnemies(attackedEnemy);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert - 1, myPlayer.PosHor);
+                    nextVert = myPlayer.PosVert - 1;
+                    nextHor = myPlayer.PosHor;
                     break;
                 case ConsoleKey.DownArrow:
                     //Console.WriteLine("Down Arrow");
                     Console.Clear();
-                    //This unusually long condition checks if there is an enemy in the position the player is moving in, prompting an attack
-                    if (map[myPlayer.PosVert + 1, myPlayer.PosHor] == 'R' || map[myPlayer.PosVert + 1, myPlayer.PosHor] == 'B' || map[myPlayer.PosVert + 1, myPlayer.PosHor] == 'G' || map[myPlayer.PosVert + 1, myPlayer.PosHor] == 'S' || map[myPlayer.PosVert + 1, myPlayer.PosHor] == 'M')
-                    {
-                        //It then checks through all the enmies until it finds the one at the correct position
-                        foreach (Enemy attackedEnemy in enemies)
-                        {
-                            if ((attackedEnemy.PosVert == myPlayer.PosVert + 1) && (myPlayer.PosHor == attackedEnemy.PosHor))
-                            {
-                                //The player attacks the enemy
-                                myPlayer.Attack(attackedEnemy);
-
-                                //if the enemy is still alive, it doesn't despawn it, if it is dead, it removes it.
-                                if (attackedEnemy.EnemyStatus == 2)
-                                {
-                                    DespawnEnemies(attackedEnemy);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert + 1, myPlayer.PosHor);
+                    nextVert = myPlayer.PosVert + 1;
+                    nextHor = myPlayer.PosHor;
                     break;
                 case ConsoleKey.Escape:
                     System.Environment.Exit(0);
@@ -333,8 +296,12 @@ namespace projectP1
                     }
                     break;
             }
-            PrintPlayerStatus();
 
+            //Changed switch case so that it changes the directions only, and now the function is called only at the bottom
+            PlayerAttack(nextVert, nextHor);
+            updateMatrix(myPlayer.PosVert, myPlayer.PosHor, nextVert, nextHor);
+            PrintPlayerStatus();
+            
             //Delays keystrokes so that the screen has time to refresh
             Thread.Sleep(100);
 
@@ -383,7 +350,6 @@ namespace projectP1
             Console.WriteLine("Player Class: {0}    Player Health: {1}/{2}     Level {3} ", myPlayer.PlayerClass, myPlayer.CurrentHealth, myPlayer.MaxHealth, currentLevel);
             Console.WriteLine("Player Name: {0}", myPlayer.PlayerName); ;
         }
-
 
         //This function shows us enemy information that was useful during the development of the project
         public void DebugEnemyPos()

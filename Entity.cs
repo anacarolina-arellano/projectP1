@@ -13,11 +13,7 @@ namespace projectP1
     abstract class Entity
     {
         //possible status of player and enemies
-        protected enum EntityStatus
-        {
-            ALIVE = 1,
-            DEAD
-        }
+        protected bool entityStatus=true;
         //Attributes
         protected char identifier;    //The Console identifier for the entity
         protected int currentHealth;  //The current health of the entity (never more than maxHealth)
@@ -28,6 +24,18 @@ namespace projectP1
         protected int posHor;              //Current position in the Grid on the X Axis
 
         //Properties
+        public bool EntityStatus
+        {
+            get
+            {
+                return entityStatus;
+            }
+            set
+            {
+                entityStatus = value;
+            }
+        }
+
         public char Identifier
         {
             get

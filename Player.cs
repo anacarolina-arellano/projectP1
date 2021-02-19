@@ -16,10 +16,15 @@ namespace projectP1
         string playerName;
         //The player can be a Fighter, a Wizard or a Thief
         string playerClass;
-        //Stores the value of an enum determining whether its alive or dead
-        int playerStatus = 1;
         //Determines the health given at the end of each level depending on your class
         int healthMultiplier;
+
+        enum PlayerClasses
+        {
+            FIGHTER = 1,
+            THIEF,
+            WIZARD
+        }
 
         //Maximum Health that a player can have
         //Based on its class
@@ -64,20 +69,6 @@ namespace projectP1
             }
         }
 
-        //Sets the player's status to the received value
-        //Returns the player's status
-        public int PlayerStatus
-        {
-            get
-            {
-                return playerStatus;
-            }
-            set
-            {
-                playerStatus = value;
-            }
-        }
-
         //Determines the max health a player gains upon finishing a level
         public int HealthMultiplier
         {
@@ -88,13 +79,14 @@ namespace projectP1
         }
 
         //Constructor
-        public Player(string playerName, char identifier)
+        public Player(string playerName, int classNum)
         {
             this.playerName = playerName;
-            switch (identifier)
+            switch (classNum)
             {
                 //Fighters are the most durable of the classes. They hit ok and have medium armor
-                case 'F':
+                case (int)PlayerClasses.FIGHTER:
+                    this.identifier = 'F';
                     this.playerClass = "Fighter";
                     this.maxHealth = 20;
                     this.currentHealth = maxHealth;
@@ -103,7 +95,8 @@ namespace projectP1
                     this.healthMultiplier = 2;
                     break;
                 //Thieves are the most nimble of them all. They hit ok and have a medium health pool
-                case 'T':
+                case (int)PlayerClasses.THIEF:
+                    this.identifier = 'T';
                     this.playerClass = "Thief";
                     this.maxHealth = 15;
                     this.currentHealth = maxHealth;
@@ -112,7 +105,8 @@ namespace projectP1
                     this.healthMultiplier = 1;
                     break;
                 //Wizards have the lowest armor and health, but they can hit like a truck
-                case 'W':
+                case (int)PlayerClasses.WIZARD:
+                    this.identifier = 'W';
                     this.playerClass = "Wizard";
                     this.maxHealth = 10;
                     this.currentHealth = maxHealth;
@@ -130,18 +124,17 @@ namespace projectP1
             Console.WriteLine("You attack the {0}!", enemyReceiving.EnemyName);
             base.Attack(receiving);
             //should the player not die, they have the opportunity to attack back
-            if (enemyReceiving.EnemyStatus == 1)
+            if (enemyReceiving.EntityStatus)
             {
                 Console.WriteLine("They attack you back!");
                 enemyReceiving.Attack(this);
-                return;
             }
         }
 
         //Player died
         protected override void Die()
         {
-            playerStatus = (int)EntityStatus.DEAD;
+            EntityStatus = false;
         }
     }
 }

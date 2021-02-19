@@ -13,31 +13,12 @@ namespace projectP1
 {
     class MainClass
     {
-        //Function that allows us to interpret the received
-        //number and change it into a valid class for the player
-        public static char setClass(int num)
-        {
-            char chosen = 'T';
-            switch (num)
-            {
-                case 1:
-                    chosen = 'F'; //Class fighter
-                    break;
-                case 2:
-                    chosen = 'T'; //Class thief
-                    break;
-                case 3:
-                    chosen = 'W'; //Class wizard
-                    break;
-                default:
-                    break;
-            }
-            return chosen;
-        }
-
+        //Runs the actual game
         public static void Main(string[] args)
         {
             int keepPlaying = 1;
+
+            //Loop that determines whther the player keeps playing or not
             while (keepPlaying == 1)
             {
                 //Declaration of variables
@@ -135,8 +116,7 @@ namespace projectP1
 
                 //Declaration of variables that are dependant
                 //from previous player's answers
-                char myClass = setClass(answer);
-                Player myPlayer = new Player(name, myClass);
+                Player myPlayer = new Player(name, answer);
                 GameScreen gs = new GameScreen(myPlayer);
 
                 //game starts
@@ -155,7 +135,7 @@ namespace projectP1
                     gs.updateMatrix(myPlayer.PosVert, myPlayer.PosHor, myPlayer.PosVert, myPlayer.PosHor);
 
                     bool continueFlag = true;
-                    while (continueFlag && myPlayer.PlayerStatus != 2)
+                    while (continueFlag && myPlayer.EntityStatus)
                     {
                         if (gs.MovePlayer() != true)   // get information from MovePlayer for next Level
                         {
@@ -163,7 +143,7 @@ namespace projectP1
                         }
                     }
                     //if player has reached the last level
-                    if (gs.CurrentLevel == MAX_LEVEL && myPlayer.PlayerStatus !=2)
+                    if (gs.CurrentLevel == MAX_LEVEL && myPlayer.EntityStatus)
                     {
                         Console.Clear();
                         myMenu.congratulations();
@@ -172,7 +152,7 @@ namespace projectP1
                         break;
                     }
                     //If player has died at some point
-                    else if(myPlayer.PlayerStatus == 2)
+                    else if(!myPlayer.EntityStatus)
                     {
                         Console.Clear();
                         myMenu.gameOver();
@@ -181,7 +161,7 @@ namespace projectP1
                         break;
                     }
                     gs.CurrentLevel++;    //Increment level
-                    myPlayer.MaxHealth += (gs.CurrentLevel * myPlayer.HealthMultiplier);
+                    myPlayer.MaxHealth += (gs.CurrentLevel * myPlayer.HealthMultiplier); //Increments Player Max Health so that it properly scales with the ammount of enemies
                 }
 
                 //Game has ended

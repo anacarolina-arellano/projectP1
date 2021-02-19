@@ -15,8 +15,7 @@ namespace projectP1
         //Attributes
         //stores the name of the enemy to print on console
         string enemyName;
-        //Stores the value of an enum determining whether its alive or dead
-        int enemyStatus = (int)EntityStatus.ALIVE;
+        
 
         bool alreadyMoved = false;
 
@@ -29,7 +28,7 @@ namespace projectP1
             }
             set
             {
-                this.maxHealth = MaxHealth;
+                maxHealth = MaxHealth;
             }
         }
 
@@ -39,19 +38,6 @@ namespace projectP1
             get
             {
                 return enemyName;
-            }
-        }
-
-        //Changed only in the case that Die() is called
-        public int EnemyStatus
-        {
-            get
-            {
-                return enemyStatus;
-            }
-            set
-            {
-                enemyStatus = value;
             }
         }
 
@@ -131,7 +117,7 @@ namespace projectP1
         protected override void Die()
         {
             Console.WriteLine("The {0} has died!", enemyName);
-            enemyStatus = (int)EntityStatus.DEAD;
+            EntityStatus = false;
         }
     }
 }

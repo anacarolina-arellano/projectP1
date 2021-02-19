@@ -42,6 +42,7 @@ namespace projectP1
 
             }
         }
+       
         //Sets the name of the player to the received value
         //Returns the player's name
         public string PlayerName
@@ -55,6 +56,7 @@ namespace projectP1
                 playerName = value;
             }
         }
+        
         //Sets the class of the player to the received value
         //Returns the player's class
         public string PlayerClass

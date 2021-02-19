@@ -36,18 +36,6 @@ namespace projectP1
             }
         }
 
-        public char Identifier
-        {
-            get
-            {
-                return identifier;
-            }
-            set
-            {
-                identifier = value;
-            }
-        }
-
         //Marks the player's current health
         public int CurrentHealth
         {
@@ -136,7 +124,6 @@ namespace projectP1
                 posHor = value;
             }
         }
-
 
         //Happens whenever an entity collides with another, and happens the same way for both types of entities
         public virtual void Attack(Entity receiving)

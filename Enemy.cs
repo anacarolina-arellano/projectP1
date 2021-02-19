@@ -16,7 +16,6 @@ namespace projectP1
         //stores the name of the enemy to print on console
         string enemyName;
         
-
         bool alreadyMoved = false;
 
         //Both types of entities behave differentyl in how their MaxHealth fluctuates in game, so they have different properties
@@ -53,7 +52,6 @@ namespace projectP1
                 alreadyMoved = value;
             }
         }
-
 
         //Constructor
         public Enemy(char identifier, int posVert, int posHor)
@@ -107,6 +105,7 @@ namespace projectP1
 
             }
         }
+        
         //Function to make damage to the player
         public override void Attack(Entity receiving)
         {

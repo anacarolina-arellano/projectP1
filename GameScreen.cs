@@ -62,6 +62,7 @@ namespace projectP1
 
             // StreamReader
             string levelFile = "../../levels/level" + currentLevel + ".txt";
+            //string levelFile = "levels/level" + currentLevel + ".txt";
             StreamReader sr = new StreamReader(levelFile); // import from levelFile
 
             int count = 0;
@@ -87,7 +88,7 @@ namespace projectP1
                     }
 
                     //Checks for enemies in tilemap and spawns them in
-                    if (map[i, j] == 'R' || map[i, j] == 'B' || map[i, j] == 'S' || map[i, j] == 'G' || map[i, j] == 'M')
+                    if (CheckEnemy(i, j))
                     {
                         SpawnEnemies(i, j, map[i, j]);
                     }
@@ -116,7 +117,7 @@ namespace projectP1
             {
                 for (int j = 0; j < WIDTH; j++)
                 {
-                    if (map[i, j] == 'R' || map[i, j] == 'B' || map[i, j] == 'S' || map[i, j] == 'G' || map[i, j] == 'M')
+                    if (CheckEnemy(i, j))
                     {
                         //Console.Write(map[i, j]);
                         //1. Check enemy
@@ -201,6 +202,13 @@ namespace projectP1
         {
             // Enemy checks the existance of player using 4 directions Radar
             if (map[vert - 1, hor] == '$' || map[vert, hor - 1] == '$' || map[vert + 1, hor] == '$' || map[vert, hor + 1] == '$')
+                return true;
+            return false;
+        }
+        
+        public bool CheckEnemy(int vert, int hor)
+        {
+            if (map[vert, hor] == 'R' || map[vert, hor] == 'B' || map[vert, hor] == 'S' || map[vert, hor] == 'G' || map[vert, hor] == 'M')
                 return true;
             return false;
         }
